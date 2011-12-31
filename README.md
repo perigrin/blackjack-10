@@ -11,7 +11,7 @@ here is the 10 line version
     my ( $player, $dealer ) = map { deal( $_, 2 ) } ( [], [] );
     while ( prompt( "@$player\nHit? ", '-tyn1' ) ) { show( "Busted!", $player ) && exit if value( deal( $player, 1 ) ) > 21;}
     while ( say("Dealer @$dealer") && value($dealer) < 17 ) { show( "Dealer busted!", $dealer ) && exit if value( deal( $dealer, 1 ) ) > 21; }
-    value($player) > value($dealer) ? show( "Player wins", $player ) : show( "Dealer wins", $dealer );
+    value($player) >= value($dealer) ? show( "Player wins", $player ) : show( "Dealer wins", $dealer );
 
 # Spot the Bug
 

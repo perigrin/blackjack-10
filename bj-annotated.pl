@@ -38,7 +38,7 @@ while ( say("Dealer @$dealer") && value($dealer) < 17 ) {
         if value( deal( $dealer, 1 ) ) > 21;
 }
 # figure out who won
-value($player) > value($dealer)
+value($player) >= value($dealer)
     ? show( "Player wins", $player )
     : show( "Dealer wins", $dealer );
 

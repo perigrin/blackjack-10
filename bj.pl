@@ -4,9 +4,9 @@ use List::Util qw(shuffle);
 
 sub deal(+$) {
     state $shoe = [
-        shuffle map {
-            my $c = $_;
-            map {"$c$_"} qw(❤ ◆ ♣ ♠)
+        shuffle map { 
+            my $v = $_;
+            map {"$v$_"} qw(❤ ◆ ♣ ♠)
             } ( 2 .. 10, qw( J Q K A ) ) x 6
     ];
     push $_[0], shift $shoe for ( 1 .. $_[1] );
@@ -34,7 +34,7 @@ while ( say("Dealer @$dealer") && value($dealer) < 17 ) {
     show( "Dealer busted!", $dealer ) && exit
         if value( deal( $dealer, 1 ) ) > 21;
 }
-value($player) > value($dealer)
+value($player) >= value($dealer)
     ? show( "Player wins", $player )
     : show( "Dealer wins", $dealer );
 
