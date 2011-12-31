@@ -9,7 +9,7 @@ here is the 10 line version
     sub value { my $v; for ( local @_ = @{ shift() } ) { s/[ ❤ ◆ ♣ ♠ ]//; s/[JQK]/10/; $v < 11 ? s/A/11/ : s/A/1/; $v += $_; } $v; }
     sub show($+) { say sprintf "%s (%i)", "$_[0] @{$_[1]}", value( $_[1] ) }
     my ( $player, $dealer ) = map { deal( $_, 2 ) } ( [], [] );
-    while ( prompt( "@$player\nHit? ", '-tyn1' ) ) { show( "Busted!", $player ) && exit if value( deal( $player, 1 ) ) > 21;}
+    while ( prompt( "@$player\nHit? ", '-tyn1' ) ) { if ( value( deal( $player, 1 ) ) > 21 ) { show( "Busted!", $player ); exit; } }
     while ( say("Dealer @$dealer") && value($dealer) < 17 ) { show( "Dealer busted!", $dealer ) && exit if value( deal( $dealer, 1 ) ) > 21; }
     value($player) >= value($dealer) ? show( "Player wins", $player ) : show( "Dealer wins", $dealer );
 

@@ -2,14 +2,14 @@ use 5.14.1;
 use IO::Prompt;
 use List::Util qw(shuffle);
 
-sub deal(+$) {
+sub deal {
     state $shoe = [
-        shuffle map { 
+        shuffle map {
             my $v = $_;
             map {"$v$_"} qw(❤ ◆ ♣ ♠)
             } ( 2 .. 10, qw( J Q K A ) ) x 6
     ];
-    push $_[0], shift $shoe for ( 1 .. $_[1] );
+    push $_[0], splice( $shoe, 0, $_[1] );
     $_[0];
 }
 
@@ -23,17 +23,24 @@ sub value {
     }
     $v;
 }
-sub show($+) { say sprintf "%s (%i)", "$_[0] @{$_[1]}", value( $_[1] ) }
+sub show { say sprintf "%s (%i)", "$_[0] @{$_[1]}", value( $_[1] ) }
 
 my ( $player, $dealer ) = map { deal( $_, 2 ) } ( [], [] );
 
 while ( prompt( "@$player\nHit? ", '-tyn1' ) ) {
-    show( "Busted!", $player ) && exit if value( deal( $player, 1 ) ) > 21;
+    if ( value( deal( $player, 1 ) ) > 21 ) {
+        show( "Busted!", $player );
+        exit;
+    }
 }
+
 while ( say("Dealer @$dealer") && value($dealer) < 17 ) {
-    show( "Dealer busted!", $dealer ) && exit
-        if value( deal( $dealer, 1 ) ) > 21;
+    if ( value( deal( $dealer, 1 ) ) > 21 ) {
+        show( "Dealer busted!", $dealer );
+        exit;
+    }
 }
+
 value($player) >= value($dealer)
     ? show( "Player wins", $player )
     : show( "Dealer wins", $dealer );
