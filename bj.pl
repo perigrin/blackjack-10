@@ -23,6 +23,7 @@ sub value {
     }
     $v;
 }
+
 sub show { say sprintf "%s (%i)", "$_[0] @{$_[1]}", value( $_[1] ) }
 
 my ( $player, $dealer ) = map { deal( $_, 2 ) } ( [], [] );
