@@ -16,8 +16,8 @@ sub deal( $hand, $n ) {
 }
 
 sub value($hand) {
-    reduce { $a += ( "$b" ne 'A' ? $b : $a < 11 ? 1 : 11 ) }
-    map { s/[ ❤ ◆ ♣ ♠ ]//g; s/[JQK]/10/r; } [@$hand]->@*;
+    reduce { $a += ( "$b" ne 'A' ? $b : ( $a + 11 ) > 21 ? 1 : 11 ) }
+    map { s/\s//g; s/[ ❤ ◆ ♣ ♠ ]//g; s/[JQK]/10/r; } [@$hand]->@*;
 }
 
 sub show( $msg, $hand ) {
@@ -29,7 +29,7 @@ my ( $player, $dealer ) = map deal( $_, 2 ), ( [], [] );
 
 say "Dealer shows: $dealer->[0]";
 
-while ( prompt( "@$player\nHit? ", '-tyn1' ) ) {
+while ( prompt( "@$player (${\value($player)})\nHit? ", '-tyn1' ) ) {
     show( "Busted!", $player ) if value( deal( $player, 1 ) ) > 21;
 }
 
